@@ -8,11 +8,12 @@ min-kubernetes-server-version: 1.19
 <!-- overview -->
 
 [인그레스](/ko/docs/concepts/services-networking/ingress/)는 클러스터의 서비스에 대한 외부 액세스를 허용하는 규칙을 정의하는 
-API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-networking/ingress-controllers/)는 인그레스에 설정된 규칙을 이행한다.
+API 객체이다. 
+[인그레스 컨트롤러](/ko/docs/concepts/services-networking/ingress-controllers/)는
+인그레스에 설정된 규칙을 이행한다.
 
-이 페이지에서는 HTTP URI에 따라 요청을 Service web 또는 web2로 라우팅하는 간단한 인그레스를 설정하는 방법을 보여준다.
-
-
+이 페이지에서는 HTTP URI에 따라 요청을 Service web 또는 web2로 라우팅하는
+간단한 인그레스를 설정하는 방법을 보여준다.
 
 ## {{% heading "prerequisites" %}}
 
@@ -21,18 +22,17 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
 
 {{< note >}}
 이 튜토리얼에서 사용하는 컨테이너는 AMD64 아키텍처를 필요로 한다.
-다른 CPU 아키텍처를 사용하는 컴퓨터에서 minikube를 실행하는 경우, AMD64 아키텍처를 에뮬레이션할 수 있는 드라이버를 사용하는 방법을 고려할 수 있다.
+다른 CPU 아키텍처를 사용하는 컴퓨터에서 minikube를 실행하는 경우,
+AMD64 아키텍처를 에뮬레이션할 수 있는 드라이버를 사용하는 방법을 고려할 수 있다.
 예를 들어, Docker Desktop 드라이버가 이를 지원한다.
 {{< /note >}}
 
 {{< include "task-tutorial-prereqs.md" >}} {{< version-check >}}
-만약 이보다 더 이전 버전의 쿠버네티스를 사용하고 있다면, 
-해당 쿠버네티스 버전의 문서를 참고한다.
-
+만약 이보다 더 이전 버전의 쿠버네티스를 사용하고 있다면, 해당 쿠버네티스 버전의 문서를 참고한다.
 
 ### Minikube 클러스터 생성하기
 
-이미 로컬에 [Minikube를 설치](/ko/docs/tasks/tools/#minikube)를 했다면,
+아직 클러스터를 로컬에 생성하지 않았다면,
   `minikube start`를 실행하여 클러스터를 생성한다.
 
 <!-- steps -->
@@ -51,7 +51,9 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
     kubectl get pods -n ingress-nginx
    ```
 
-   {{< note >}}파드가 정상적으로 실행되기까지 1분 정도 소요될 수 있다.{{< /note >}}
+   {{< note >}} 
+   파드가 정상적으로 실행되기까지 1분 정도 소요될 수 있다.
+   {{< /note >}}
 
    결과는 다음과 같다.
 
@@ -89,6 +91,8 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
    web    1/1     1            1           53s
    ``` 
 
+
+
 1. 디플로이먼트를 노출시킨다.
 
    ```shell
@@ -122,40 +126,29 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
    ```shell
    minikube service web --url
    ```
-
    결과는 다음과 같다.
-
    ```
    http://172.17.0.15:31637
    ```
-  
    이전 단계의 출력에서 얻은 URL을 호출한다.
-  
    ```shell
    curl http://172.17.0.15:31637 
    ```
-  
    {{% /tab %}}
    {{% tab name="MacOS" %}}
-  
    ```shell
    # 별도의 터미널에서 명령어를 실행한다.
    minikube service web --url 
    ```
-
    결과는 다음과 같다.
-  
    ```none
    http://127.0.0.1:62445
    ! Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
    ```
-  
    다른 터미널에서, 이전 단계 출력에서 얻은 URL을 호출한다.
-  
    ```shell
    curl http://127.0.0.1:62445 
    ```
-  
    {{% /tab %}}
    {{< /tabs >}} 
    <br>
@@ -172,7 +165,8 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
 
 ## 인그레스 생성하기
 
-다음 매니페스트는 `hello-world.example`를 통해 서비스로 트래픽을 보내는 인그레스를 정의한다.
+다음 매니페스트는 `hello-world.example`를 통해 
+서비스로 트래픽을 보내는 인그레스를 정의한다.
 
 1. 다음 파일을 통해 `example-ingress.yaml`을 만든다.
 
@@ -196,7 +190,9 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
    kubectl get ingress
    ```
 
-   {{< note >}}이 작업은 몇 분 정도 소요될 수 있다.{{< /note >}}
+   {{< note >}}
+   이 작업은 몇 분 정도 소요될 수 있다.
+   {{< /note >}}
 
    다음 예시와 같이, ADDRESS 열에서 IPv4 주소를 확인할 수 있다.
 
@@ -205,28 +201,27 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
    example-ingress   <none>   hello-world.example   172.17.0.15    80      38s
    ```
 
+
 1. Ingress 컨트롤러가 트래픽을 제대로 라우팅하는지 확인한다. 사용 중인 플랫폼에 맞는 지침을 따른다:
 
   {{< note >}}
-  MacOS(Darwin)에서 Docker 드라이버를 사용하는 경우, 네트워크가 제한되어 Node IP에 직접 접근할 수 없다.
-  Ingress를 동작시키려면 새 터미널을 열고 `minikube tunnel`을 실행해야 한다.
+  MacOS(Darwin)에서 Docker 드라이버를 사용하는 경우, 네트워크가 제한되어 Node IP에 직접 접근할 수 없다. Ingress를 동작시키려면 새 터미널을 열고 `minikube tunnel`을 실행해야 한다.
   이 과정에서는 `sudo` 권한이 필요하므로, 요청이 나오면 비밀번호를 입력한다.
   {{< /note >}}
   
+
   {{< tabs name="ingress" >}}
   {{% tab name="Linux" %}}
   
   ```shell
   curl --resolve "hello-world.example:80:$( minikube ip )" -i http://hello-world.example
   ```
-  
   {{% /tab %}}
   {{% tab name="MacOS" %}}
 
   ```shell
   minikube tunnel
   ```
-
   결과는 다음과 같다.
 
   ```none
@@ -240,7 +235,6 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
   ```
 
   새 터미널을 열고 다음 명령어를 실행한다.
-
   ```shell
   curl --resolve "hello-world.example:80:127.0.0.1" -i http://hello-world.example
   ```
@@ -248,7 +242,6 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
   {{% /tab %}}
   {{< /tabs >}} 
   <br>
-
   결과는 다음과 같다.
 
   ```none
@@ -257,7 +250,9 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
   Hostname: web-55b8c6998d-8k564
   ```
 
-1. 원한다면 브라우저에서 `hello-world.example` 에 접속할 수도 있다. 호스트 컴퓨터의 `/etc/hosts` 파일 맨 아래에 
+1. 원한다면 브라우저에서 `hello-world.example` 에 접속할 수도 있다. 
+   
+   호스트 컴퓨터의 `/etc/hosts` 파일 맨 아래에 
    다음 행을 추가한다 (관리자 권한 필요).
 
      {{< tabs name="hosts" >}}
@@ -267,8 +262,6 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
      minikube ip 
    ``` 
    <br>
-
-   결과는 다음과 같다.
    
    ```none
      172.17.0.15 hello-world.example
@@ -290,7 +283,6 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
     이렇게 하면, 웹 브라우저가
    `hello-world.example` URL에 대한 요청을 Minikube로 보낸다.
 
-
 ## 두 번째 디플로이먼트 생성하기
 
 1. 다음 명령을 사용하여 두 번째 디플로이먼트를 생성한다.
@@ -298,6 +290,7 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
    ```shell
    kubectl create deployment web2 --image=gcr.io/google-samples/hello-app:2.0
    ```
+   
    결과는 다음과 같다.
 
    ```
@@ -442,10 +435,10 @@ API 객체이다. [인그레스 컨트롤러](/ko/docs/concepts/services-network
    Hostname: web2-75cd47646f-t8cjk
    ```
 
-   {{< note >}}선택 사항으로 `/etc/hosts`를 수정했다면, 브라우저에서 `hello-world.example` 과 `hello-world.example/v2` 에도 접속할 수 있다.{{< /note >}}
-
-
-
+   {{< note >}}
+   선택 사항으로 `/etc/hosts`를 수정했다면, 브라우저에서 `hello-world.example` 과 
+   `hello-world.example/v2` 에도 접속할 수 있다.
+   {{< /note >}}
 
 ## {{% heading "whatsnext" %}}
 
